@@ -1,0 +1,49 @@
+<?php
+require ('Users.php');
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Znajdź użytkownika</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <form action="" method="post" role="form">
+                <legend>Znajdź użytkownika</legend>
+                <div class="form-group">
+                    <label for="">Table</label>
+                    <select name="tableName" id="tableName" class="form-control">
+                    	<option value=""> -- Select table -- </option>
+                    	<option value="id">Id</option>
+                    	<option value="name">Nazwa użytkownika</option>
+                    	<option value="email">E-mail</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Szuakana fraza</label>
+                    <input type="text" class="form-control" name="searchfor" id="searchfor"
+                           placeholder="Wpisz zapytanie o użytkownika">
+                </div>
+                <button type="submit" class="btn btn-primary">Szukaj</button>
+            </form>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
