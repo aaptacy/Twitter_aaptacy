@@ -3,7 +3,6 @@ session_start();
 if (!isset($_SESSION['logowanie'])){
     header ('Location: TwitterHtml.php');
 }
-require 'Users.php';
 ?>
 <!doctype html>
 <html lang="en">
@@ -12,22 +11,18 @@ require 'Users.php';
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SigningUp</title>
+    <title>Strona główna</title>
 </head>
     <body>
+        <a href="SelectTweet.php">Przejdź do wyszukiwania Tweet'ów</a>
         <form action="" method="POST">
-    <label>Nazwa użytkownika:
-        <input type="text" name="name">
-    </label>
-    <label>E-mail:
-        <input type="text" name="email">
-    </label>
-    <label>Hasło:
-        <input type="text" name="hash_pass">
-    </label>
-    <input type="submit" value="Zarejestruj">
-</form>
-<br>
-
+            <label>
+                <textarea name="text" rows = 10 cols = 50 placeholder="Tweet..."></textarea>
+                <input type="submit" name="newtweet" value="Tweet!">
+            </label>
+        </form>
     </body>
 </html>
+<?php
+require 'Tweets.php';
+?>
