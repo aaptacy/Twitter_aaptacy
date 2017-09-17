@@ -89,8 +89,7 @@ class Tweets{
     }
     
     
-    static public function loadBy(PDO $conn){
-                
+    static public function loadBy(PDO $conn){            
                 try{
                     if($_POST['tableName'] == 'id'){
                         $result = $conn->query('SELECT * FROM Tweets t
@@ -104,10 +103,8 @@ class Tweets{
                                         WHERE u.name ="'.$_POST['searchfor'].'";');
                     }                   
                    if ($result->rowCount() != 0){
-                    foreach($result as $row) { 
-                        echo "<pre>";
-                        echo 'Użytkownik: '.$row['name'].' Id użytkownika: '.$row['id'].'  "'.$row['text'].'" w dniu: '.$row['creation_date'];
-                        echo "</pre>";
+                    foreach($result as $row){ 
+                        echo 'Użytkownik: '.$row['name'].' Id użytkownika: '.$row['id'].' dodał tweeta o id: '.$row[0].' "'.$row['text'].'" w dniu: '.$row['creation_date'].'<br>';
                     }
                     } else{
                         echo	"Podany użytkownik lub tweet nie istnieje";
@@ -133,17 +130,14 @@ class Tweets{
             }
     }
 }
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-$tweets = new Tweets; 
-}
-
-if(strpos($_SERVER['HTTP_REFERER'], 'MainPageHtml.php') != 0){
-   $tweets->loadAllTweets(Tweets::$conn);
-   $tweets->saveToDB(Tweets::$conn); 
-}
-elseif(strpos($_SERVER['HTTP_REFERER'], 'SelectTweet.php') != 0){
-    $tweets->loadBy(Tweets::$conn); 
-}
+    $tweets = new Tweets; 
+    if(strpos($_SERVER['REQUEST_URI'], 'MainPageHtml.php') != 0){
+       $tweets->loadAllTweets(Tweets::$conn);
+       $tweets->saveToDB(Tweets::$conn); 
+    }
+    elseif(strpos($_SERVER['REQUEST_URI'], 'SelectTweet.php') != 0){
+        $tweets->loadBy(Tweets::$conn); 
+    }
 
 /*elseif (strpos($_SERVER['HTTP_REFERER'], 'SelectUserHtml.php') != 0){
         switch ($_POST['user']){
