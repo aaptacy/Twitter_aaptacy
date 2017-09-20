@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+session_start();
 if (!isset($_SESSION['logowanie'])){
     header ('Location: TwitterHtml.php');
 }
@@ -27,7 +28,7 @@ if (!isset($_SESSION['logowanie'])){
                     <label for="">Table</label>
                     <select name="tableName" id="tableName" class="form-control">
                     	<option value=""> -- Select table -- </option>
-                    	<option value="id">Id</option>
+                    	<option value="id">Id tweeta</option>
                     	<option value="name">Nazwa użytkownika</option>
                     </select>
                 </div>
@@ -36,7 +37,7 @@ if (!isset($_SESSION['logowanie'])){
                     <input type="text" class="form-control" name="searchfor" id="searchfor"
                            placeholder="Wpisz zapytanie o użytkownika">
                 </div>
-                <input type="submit" name="user" value="Szukaj" class="btn btn-primary">
+                <input type="submit" name="tweet" value="Szukaj" class="btn btn-primary">
             </form>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

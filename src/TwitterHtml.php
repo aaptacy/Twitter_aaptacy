@@ -1,34 +1,10 @@
 <?php
-session_start();
-if (!isset($_SESSION['logowanie'])){
-    $_SESSION['logowanie'] = [];
-}else{
-    header ('Location: MainPageHtml.php');
+if(isset($_SESSION['logowanie'])){
+    header("Location:MainPageHtml.php");
 }
-
-$conn = new PDO("mysql:host=localhost;dbname=Twitter",'root','coderslab',[
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
-if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-    if (isset($_POST['email']) && isset($_POST['password'])){
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        try{
-            $result = $conn->query('SELECT * FROM Users WHERE email = "'.$email.'";');
-            foreach ($result as $row){
-               if (password_verify($password, $row['hash_pass'])){
-                    $_SESSION['logowanie'] = [$row['id'], $row['name'], $row['email']];
-                   header("Location:MainPageHtml.php");
-               }else{
-                   echo 'Nieprawidłowy e-mail lub hasło'; 
-               }       
-            } 
-        }catch (PDOException	$e){
-            echo $e;
-        }
-    }
-}
+require 'LogIn.php';
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -37,6 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Twitter</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
     <body>
         <form action="" method="POST">

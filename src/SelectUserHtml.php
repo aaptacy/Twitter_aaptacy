@@ -1,4 +1,5 @@
-<?phpsession_start();
+<?php
+session_start();
 if (!isset($_SESSION['logowanie'])){
     header ('Location: TwitterHtml.php');
 }
@@ -15,6 +16,19 @@ if (!isset($_SESSION['logowanie'])){
     <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <body>
+        <table width = "300">
+        <tr >
+            <td  width = "130">
+                <a href ="MainPageHtml.php">Strona główna</a>
+            </td>
+            <td>
+                <a href ="MessagesHtml.php">Poczta</a>
+            </td>
+            <td>
+                <a href="LogOut.php">Wyloguj się</a>
+            </td>
+        </tr>
+        </table>
 <div class="container">
     <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

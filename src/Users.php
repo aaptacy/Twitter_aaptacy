@@ -51,17 +51,14 @@ class Users{
     }
     
     public function saveToDB(PDO $conn){
-            if($this->id == null && !empty($_POST['name']) &&  !empty($_POST['email']) && !empty($_POST['hash_pass'])){
+            if(!empty($_POST['name']) &&  !empty($_POST['email']) && !empty($_POST['hash_pass'])){
+                $stmt = $conn->prepare('INSERT INTO Users (name, email, hash_pass) VALUES (:name, :email, :hash_pass);');
+                $stmt->bindValue(':name',$this->setName($_POST['name']), PDO::PARAM_STR);
+                $stmt->bindValue(':email',$this->setEmail($_POST['email']), PDO::PARAM_STR);
+                $stmt->bindValue(':hash_pass',$this->setHash_pass($_POST['hash_pass']), PDO::PARAM_STR);
                 try{
-                   $stmt = $conn->prepare('INSERT INTO Users (name, email, hash_pass) VALUES (:name, :email, :hash_pass);');
-                    $result = $stmt->execute(
-                        ['name' => $this->setName($_POST['name']),
-                        'email' => $this->setEmail($_POST['email']),
-                        'hash_pass' => $this->setHash_pass($_POST['hash_pass'])
-                         ]);
-                   if($conn->lastInsertId() != 0 ){;
-                    echo 'Rejestracja przebiegła pomyślnie <a href="MainPageHtml.php">Przejdź do strony głównej</a>';
-                   }
+                    $result = $stmt->execute();
+                    echo 'Rejestracja przebiegła pomyślnie  <a href="MainPageHtml.php">Przejdź do strony głównej</a>';
                 }catch (PDOException $e){
                     echo 'Już istnieje użytkownik o podanym e-mailu';
                 }
@@ -71,57 +68,55 @@ class Users{
             }
     }
     
-      public function modifyUser(PDO $conn){
-                try{
-                    //zapisać w sesji który użytkownik ma być wyedytowany
-                   $stmt = $conn->prepare('UPDATE Users SET email=:email, hash_pass=:hash_pass WHERE id = 8;');
-                   $result = $stmt->execute(
-                        ['email'        => $this->setEmail($_POST['email']),
-                         'hash_pass'    => $this->setHash_pass($_POST['hash_pass'])
-                         ]);
-                       echo 'Nowe dane zostały zapisane';
-                }catch (PDOException $e){
-                    echo 'Podany email jest zajęty';
-                }
+    public function modifyUser(PDO $conn){
+        $stmt = $conn->prepare('UPDATE Users SET email=:email, hash_pass=:hash_pass WHERE id ='.$_SESSION['logowanie'][0].';');
+        $stmt->bindValue(':email',$this->setEmail($_POST['email']), PDO::PARAM_STR);
+        $stmt->bindValue(':hash_pass',$this->setHash_pass($_POST['hash_pass']), PDO::PARAM_STR);       
+        try{       
+            $result = $stmt->execute();
+            echo 'Nowe dane zostały zapisane';
+        }catch (PDOException $e){
+            echo 'Podany email jest zajęty';
+        }
     }
     
-     public function delete(PDO $conn){
-                $key = $_POST['tableName'];
-                $value = $_POST['searchfor'];
-                try{
-                   $result = $conn->query('DELETE FROM Users WHERE '.$key.' = "'.$value.'";');
-                   if ($result->rowCount() != 0){
-                        echo 'Usunięto użytkownika';
-                    }else{
-                        echo "Szukany użytkownik nie istnieje";
-                    }
-                }catch (PDOException	$e){      
-                }
+    public function delete(PDO $conn){
+        $key = $_POST['tableName'];
+        $value = $_POST['searchfor'];
+        try{
+            $result = $conn->query('DELETE FROM Users WHERE '.$key.' = "'.$value.'";');
+            if ($result->rowCount() != 0){
+                echo 'Usunięto użytkownika';
+            }else{
+                echo "Szukany użytkownik nie istnieje";
+            }
+        }catch (PDOException	$e){      
+        }
     }
     
     
     static public function loadBy(PDO $conn){
-                $key = $_POST['tableName'];
-                $value = $_POST['searchfor'];
-                try{
-                   $result = $conn->query('SELECT * FROM Users WHERE '.$key.' = "'.$value.'";');
-                   if ($result->rowCount() != 0){
-                    foreach($result as $row) { 
-                        echo "<pre>";
-                        echo 'Id:'.$row['id'].', nazwa użytkownika: '.$row['name'].', e-mail: '.$row['email'];
-                        echo "</pre>";
-                    }
-                    } else{
-                        echo	"Szukany użytkownik nie istnieje";
-                    }
-                }catch (PDOException	$e){      
+        $key = $_POST['tableName'];
+        $value = $_POST['searchfor'];
+        try{
+            $result = $conn->query('SELECT * FROM Users WHERE '.$key.' = "'.$value.'";');
+            if ($result->rowCount() != 0){
+                foreach($result as $row) { 
+                    echo "<pre>";
+                    echo 'Id:'.$row['id'].', nazwa użytkownika: '.$row['name'].', e-mail: '.$row['email'];
+                    echo "</pre>";
                 }
+            } else{
+                echo	"Szukany użytkownik nie istnieje";
+            }
+        }catch (PDOException	$e){      
+        }
     }
     
    
     static public function loadAllUsers(PDO $conn){ 
         try{
-                $result = $conn->query('SELECT * FROM Users;');
+            $result = $conn->query('SELECT * FROM Users;');
                 if ($result !== false){
                     foreach($result as $row) { 
                         $loadedUser = new Users; 
@@ -136,21 +131,20 @@ class Users{
                 print_r ($ret);
                 echo'</pre>';
                 return $ret;
-            }catch (PDOException $e){   
-            }
+        }catch (PDOException $e){   
+        }
     }
 }
- if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+
 $user = new Users; 
- }
-if(strpos($_SERVER['HTTP_REFERER'], 'Register.php') != 0){
+if(strpos($_SERVER['REQUEST_URI'], 'RegisterHtml.php') != 0){
     $user->saveToDB(Users::$conn); 
 }
-elseif(strpos($_SERVER['HTTP_REFERER'], 'UserEditHtml.php') != 0){
+elseif(strpos($_SERVER['REQUEST_URI'], 'UserEditHtml.php') != 0){
     $user->modifyUser(Users::$conn); 
 }
-elseif (strpos($_SERVER['HTTP_REFERER'], 'SelectUserHtml.php') != 0){
-        switch ($_POST['user']){
+elseif (strpos($_SERVER['REQUEST_URI'], 'SelectUserHtml.php') != 0){
+    switch ($_POST['user']){
         case 'Szukaj':
             $user->loadBy(Users::$conn); 
             break;
