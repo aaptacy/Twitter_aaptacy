@@ -23,7 +23,7 @@ if (!isset($_SESSION['logowanie'])){
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <form action="" method="post" role="form">
-                <legend>Znajdź/usuń użytkownika</legend>
+                <legend>Znajdź tweeta</legend>
                 <div class="form-group">
                     <label for="">Table</label>
                     <select name="tableName" id="tableName" class="form-control">
