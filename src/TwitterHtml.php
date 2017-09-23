@@ -28,6 +28,6 @@ require 'LogIn.php';
 </form>
 <br>
         Nie masz konta?
-        <a href="Register.php">Zarejestruj się</a>
+        <a href="RegisterHtml.php">Zarejestruj się</a>
     </body>
 </html>
