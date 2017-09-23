@@ -1,8 +1,4 @@
 <?php
-session_start();
-if (!isset($_SESSION['logowanie'])){
-    header ('Location: TwitterHtml.php');
-}
 require 'Users.php';
 ?>
 <!doctype html>
